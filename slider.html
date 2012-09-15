@@ -5,8 +5,15 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
     <script type="text/javascript" src="slider.js"></script>
     <style type="text/css">
+        body {
+            font: 13px courier;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         #slider {
-            border: 1px solid black;
             overflow: hidden;
             position: relative;
             height: 250px;
@@ -24,7 +31,6 @@
 
         .slide {
             float: left;
-            overflow: auto;
             height: 250px;
         }
 
@@ -44,19 +50,29 @@
             background-color: #CCCCCC;
             width: 30px;
             height: 30px;
-            background-color: black;
+            background-color: #999999;
             position: absolute;
             border-radius: 30px;
+            border: 0;
+            padding: 0;
+        }
+
+        .next:hover,
+        .prev:hover,
+        .progress em {
+            cursor: pointer;
         }
 
         .progress {
             clear: both;
             position: absolute;
-            bottom: 10px;
+            bottom: 0px;
             width: 100%;
             color: white;
             letter-spacing: 10px;
             text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
         }
 
         .progress p {
@@ -64,11 +80,15 @@
             margin: 0px;
         }
 
-        .slide-1 { background-color: #666666; }
-        .slide-2 { background-color: #777777; }
-        .slide-3 { background-color: #888888; }
-        .slide-4 { background-color: #999999; }
-        .slide-5 { background-color: pink; }
+
+        em {
+            font-style: normal;
+            color: pink;
+        }
+
+        em.active {
+            color: red;
+        }
 
     </style>
 </head>
@@ -80,11 +100,21 @@
                 <button data-dir="prev" class="prev"></button>
             </div>
             <div class="canvas">
-                <div class="slide slide-1"></div>
-                <div class="slide slide-2"></div>
-                <div class="slide slide-3"></div>
-                <div class="slide slide-4"></div>
-                <div class="slide slide-5"></div>
+                <div class="slide slide-1">
+                    <img src="http://lorempixel.com/880/250/" />
+                </div>
+                <div class="slide slide-2">
+                    <img src="http://lorempixel.com/880/250/" />
+                </div>
+                <div class="slide slide-3">
+                    <img src="http://lorempixel.com/880/250/" />
+                </div>
+                <div class="slide slide-4">
+                    <img src="http://lorempixel.com/880/250/" />
+                </div>
+                <div class="slide slide-5">
+                    <img src="http://lorempixel.com/880/250/" />
+                </div>
             </div>
             <div class="progress"></div>
         </div>

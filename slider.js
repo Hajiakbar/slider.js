@@ -7,12 +7,13 @@
         this.$el = options.el || $('body');
         this.slideCount = this.$el.find('.slide').length;
         this.autoplay = options.autoPlay || false;
+        this.type = options.type || 'hearts';
         this.current = 1;
         this.position = 0;
         this.init();
     };  
 
-    // Creates all the jQuery variables for use throughout the widget, fires off the resize, addEvents and update methods
+    // Creates all the jQuery variables for use throughout the widget, fires off the resize, addEvents, generateNav and update methods
     Slider.prototype.init = function() {
         console.log('slider loaded');
         this.$canvas = $('.canvas', this.$el);
@@ -22,6 +23,7 @@
         this.$progress = $('.progress', this.$el);
         this.resize();
         this.addEvents();
+        this.generateNav(this.type);
         this.update();
         if(this.autoplay) {
             this.autoPlay();
@@ -36,12 +38,11 @@
         });
 
         this.$next.on('click', function() {
-            if(that.current === that.slideCount) {
-                that.goto(1);   
-            }
-            else {
-                that.next();
-            }
+            that.next();
+        });
+
+        this.$progress.on('click', 'em', function() {
+            that.goto($(this).attr('data-slide'));
         });
     };
 
@@ -53,6 +54,15 @@
         this.$slides.css({'width': this.width});
     };
 
+    // Creates the navigation for the slider, uses HTML entities for each step, defaults to hearts
+    Slider.prototype.generateNav = function(type) {
+        var nav = '';
+        for(var i = 1; i <= this.slideCount; i++) {
+            nav += '<em data-slide="' + i +'">&' + type + ';</em>';
+        }
+        this.$progress.html(nav);
+    };
+
     // Helper function to move you to a particular slide. TODO: use this for every slide (on next, prev etc..), as there is quite
     // a bit of repeated code (for the animation)
     Slider.prototype.goto = function(slide) {
@@ -61,7 +71,7 @@
         if(slide === 1) {
             this.position = 0;
         } else {
-            this.position = this.current * -this.width;
+            this.position = (this.current - 1) * -this.width;
         }
         this.$canvas.animate({'left' : this.position}, 'fast', that.update());
     };
@@ -69,44 +79,33 @@
     // Ran when the next button is clicked
     Slider.prototype.next = function() {
         var that = this;
-        if(this.current !== this.slideCount) {
-            this.position = this.position - this.width;
+        if(this.current < this.slideCount) {
             this.current++;
+            this.position = this.position - this.width;
             this.$canvas.animate({'left': this.position}, 'fast', that.update());
+        } else {
+            this.goto(1);
         }
     };
 
     // Ran when the previous button is clicked
     Slider.prototype.prev = function() {
         var that = this;
-        if(this.current !== 1){
+        if(this.current > 1){
             this.position = this.position + this.width;
             this.current--;
             this.$canvas.animate({'left': this.position}, 'fast', that.update());
+        } else {
+            that.goto(that.slideCount);
         }
     };
 
     // This method is called everytime a UI action takes place (prev, next, reset)
     Slider.prototype.update = function() {
-        var nav = '';
-        switch(this.current) {
-            case 1:
-                nav = '<p>xoooo</p>';
-                break;
-            case 2:
-                nav = 'oxooo';
-                break;
-            case 3:
-                nav = 'ooxoo';
-                break;
-            case 4:
-                nav = 'oooxo';
-                break;
-            case 5:
-                nav = 'oooox';
-                break;
-        }
-        this.$progress.html(nav);
+        this.$progress.children()
+            .removeClass('active')
+            .eq(this.current - 1)
+            .addClass('active');
     };
 
     // Auto plays the slider
