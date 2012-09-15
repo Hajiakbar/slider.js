@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slider test</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="slider.js"></script>
+    <style type="text/css">
+        #slider {
+            border: 1px solid black;
+            overflow: hidden;
+            position: relative;
+            height: 250px;
+            width: 980px;
+        }
+
+        .canvas {
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+        }
+        .store {
+            float: left;
+        }
+
+        .slide {
+            float: left;
+            overflow: auto;
+            height: 250px;
+        }
+
+
+        .controls {
+            z-index: 9999;
+            overflow: auto;
+        }
+
+        .next { right: 10px; }
+
+        .prev { left: 10px; }
+
+        .next, .prev {
+            top: 100px; 
+            z-index: 9999;
+            background-color: #CCCCCC;
+            width: 30px;
+            height: 30px;
+            background-color: black;
+            position: absolute;
+            border-radius: 30px;
+        }
+
+        .progress {
+            clear: both;
+            position: absolute;
+            bottom: 0px;
+            width: 70px;
+            background-color:black;
+            color: white;
+            letter-spacing: 10px;
+        }
+
+        .slide-1 { background-color: #666666; }
+        .slide-2 { background-color: #777777; }
+        .slide-3 { background-color: #888888; }
+        .slide-4 { background-color: #999999; }
+
+    </style>
+</head>
+<body>
+    <div id="slider">
+        <div class="inner-wrap">
+            <div class="controls">
+                <div class="next"></div>
+                <div class="prev"></div>
+            </div>
+            <div class="canvas">
+                <div class="slide slide-1"></div>
+                <div class="slide slide-2"></div>
+                <div class="slide slide-3"></div>
+                <div class="slide slide-4"></div>
+            </div>
+            <div class="progress"></div>
+        </div>
+    </div>
+</body>
+</html>
