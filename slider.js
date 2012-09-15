@@ -15,29 +15,17 @@ var Slider = function(options) {
 Slider.prototype.addEvents = function() {
     var that = this; // So we can refer to Slider from within the event handler
     this.$prev.bind('click', function() {
-        that.prev();     
+        that.prev();
     });
 
     this.$next.bind('click', function() {
         if(that.current === 4) {
-            that.reset();   
+            that.goto(1);   
         }
         else {
-            that.next();            
+            that.next();     
         }
     });
-};
-
-Slider.prototype.goto = function(slide) {
-    var that = this;
-    this.position = slide * -this.totalWidth;
-    this.current = slide + 1;
-    this.$canvas.animate({
-        'left' : this.position
-    }, 'fast', 
-    function() {
-        that.update;
-    })
 };
 
 // Creates all the jQuery variables for use throughout the widget, fires off the resize, addEvents and update methods
@@ -48,27 +36,32 @@ Slider.prototype.init = function() {
     this.$next = $('.next', this.$el);
     this.$progress = $('.progress', this.$el);
     this.resize();
-    this.generate();
     this.addEvents();
+    this.update();
     if(this.autoplay) {
         this.autoPlay();
     }
 };
 
-// Resets the Slider to the first slide
-Slider.prototype.reset = function() {
+Slider.prototype.goto = function(slide) {
+    slide - 1;
     var that = this;
-    this.goto(0);
-    this.$canvas.animate({'left': this.position}, 'fast', function() {
+    this.current = slide;
+    this.position = this.current * -this.totalWidth;
+    this.$canvas.animate({
+        'left' : this.position
+    }, 
+    'fast',
+    function() {
         that.update();
     });
-};
+}
 
 // Ran when the next button is clicked
 Slider.prototype.next = function() {
     var that = this;
     if(this.current !== this.slideCount) {
-        this.position = this.current * -this.totalWidth;
+        this.position = this.position - this.totalWidth;
         this.current++;
         this.$canvas.animate({'left': this.position}, 'fast', function() {
             that.update();
@@ -80,7 +73,7 @@ Slider.prototype.next = function() {
 Slider.prototype.prev = function() {
     var that = this;
     if(this.current !== 1){
-        this.position = this.position - -this.totalWidth;
+        this.position = this.position + this.totalWidth;
         this.current--;
         this.$canvas.animate({'left': this.position}, 'fast', function() {
             that.update();
@@ -104,13 +97,24 @@ Slider.prototype.resize = function() {
 // This method is called everytime a UI action takes place (prev, next, reset)
 Slider.prototype.update = function() {
     console.log(this.current);
-};
-
-Slider.prototype.generate = function() {
     var nav = '';
-    for(var i = 0; i < this.slideCount; i++) {
-        nav += '<em data-slide="' + i + '">&hearts;</em>'
-    }
+    switch(this.current) {
+        case 1:
+            nav = 'xooo'
+            break;
+        case 2:
+            nav = 'oxoo'
+            break;
+        case 3:
+            nav = 'ooxo'
+            break;
+        case 4:
+            nav = 'ooox'
+            break;
+        default:
+            nav = 'xooo'
+    };
+
     this.$progress.html(nav);
 };
 
@@ -129,7 +133,7 @@ Slider.prototype.autoPlay = function() {
 
 // Call the slider
 $(function(){
-    var daniel = new Slider({
+    new Slider({
         el: $('#slider'),
         width: 800,
         slideCount: 4,
