@@ -32,14 +32,15 @@
 
     // Adds the event handlers to the controls
     Slider.prototype.addEvents = function() {
-        var that = this; // So we can refer to Slider from within the event handler
-        this.$prev.on('click', function() {
-            that.prev();
-        });
+        var that = this;
 
-        this.$next.on('click', function() {
-            that.next();
-        });
+        this.$prev.on('click', $.proxy(function() {
+            this.prev();
+        }, this));
+
+        this.$next.on('click', $.proxy(function() {
+            this.next();
+        }, this));
 
         this.$progress.on('click', 'em', function() {
             that.goto($(this).attr('data-slide'));
@@ -66,14 +67,13 @@
     // Helper function to move you to a particular slide. TODO: use this for every slide (on next, prev etc..), as there is quite
     // a bit of repeated code (for the animation)
     Slider.prototype.goto = function(slide) {
-        var that = this;
         this.current = slide;
         if(slide === 1) {
             this.position = 0;
         } else {
             this.position = (this.current - 1) * -this.width;
         }
-        this.$canvas.animate({'left' : this.position}, 'fast', that.update());
+        this.$canvas.animate({'left' : this.position}, 'fast', $.proxy(this.update()), this);
     };
 
     // Ran when the next button is clicked
@@ -82,7 +82,7 @@
         if(this.current < this.slideCount) {
             this.current++;
             this.position = this.position - this.width;
-            this.$canvas.animate({'left': this.position}, 'fast', that.update());
+            this.$canvas.animate({'left': this.position}, 'fast', $.proxy(this.update()), this);
         } else {
             this.goto(1);
         }
@@ -90,13 +90,12 @@
 
     // Ran when the previous button is clicked
     Slider.prototype.prev = function() {
-        var that = this;
         if(this.current > 1){
             this.position = this.position + this.width;
             this.current--;
-            this.$canvas.animate({'left': this.position}, 'fast', that.update());
+            this.$canvas.animate({'left': this.position}, 'fast', $.proxy(this.update()), this);
         } else {
-            that.goto(that.slideCount);
+            $.proxy(this.goto(this.slideCount), this);
         }
     };
 
