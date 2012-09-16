@@ -45,6 +45,20 @@
         this.$progress.on('click', 'em', function() {
             that.goto($(this).attr('data-slide'));
         });
+
+        // Sets up slide events for mobile devices
+        this.$slides.swipe({
+            threshold: {
+                x: 100,
+                y: 100
+            },
+            swipeLeft: function () {
+                that.next();
+            },
+            swipeRight: function () {
+                that.prev();
+            }
+        })
     };
 
     // Sets the dimensions of the slider + the slides
