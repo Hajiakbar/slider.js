@@ -3,6 +3,11 @@
 
     // Constructor, set some initial values + fallbacks, fire off init, when called needs to be wrapped in $(function(){ //code }) otherwise it won't work
     var Slider = function(options) {
+
+        if(!(this instanceof Slider)) {
+            return new Slider(options);
+        }
+        
         this.width = options.width || 880;
         this.$el = options.el || $('body');
         this.slideCount = this.$el.find('.slide').length;
